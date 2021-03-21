@@ -506,8 +506,9 @@ class Gridliner(object):
 
             for line, tick_value in zip(lines, line_ticks):
                 # Intersection of line with map boundary
-                line = self.axes.projection.transform_points(
-                    crs, line[:, 0], line[:, 1])[:, :2]
+                if crs != self.axes.projection:
+                    line = self.axes.projection.transform_points(
+                        crs, line[:, 0], line[:, 1])[:, :2]
                 infs = np.isinf(line).any(axis=1)
                 line = line.compress(~infs, axis=0)
                 if line.size == 0:
